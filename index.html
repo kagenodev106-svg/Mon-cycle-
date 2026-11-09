@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d6407f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mon cycle">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>Mon cycle</title>
+<style>
+:root{--bg:#fdf3f8;--sf:#fff;--ink:#4a2a55;--mu:#8a6f94;--ln:#f0dcea;--pe:#d6407f;--pes:#fbd5e6;--fe:#7a5bd0;--fes:#e4dbfa;--ac:#d6407f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#14111c;--sf:#1e1a2b;--ink:#efe9fa;--mu:#a399b8;--ln:#322b45;--pe:#f27aa8;--pes:#4d2540;--fe:#a58cf5;--fes:#34285c;--ac:#a58cf5}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45;transition:background .3s}
+main{max-width:520px;margin:0 auto;padding:16px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+h1{font-size:1.3rem;margin:0}
+h2{font-size:1rem;margin:0 0 10px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:20px;padding:16px;margin-bottom:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+label{display:flex;flex-direction:column;font-size:.8rem;color:var(--mu);flex:1;min-width:100px;gap:4px}
+input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:10px;width:100%}
+button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ac);color:#fff}
+button.g{background:transparent;color:var(--ink);border:1px solid var(--ln)}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--fe);outline-offset:2px}
+.full{width:100%;margin-top:12px}
+.big{font-size:2rem;font-weight:800;margin:0;color:var(--pe);line-height:1.1}
+.mu{color:var(--mu);font-size:.85rem;margin:4px 0 0}
+.ban{background:var(--fes);color:var(--ink);border-radius:14px;padding:12px 14px;margin-bottom:14px;font-weight:600}
+.bar{display:flex;height:12px;border-radius:8px;overflow:hidden;position:relative;margin:14px 0 6px}
+.bar i{display:block}
+.bar b{position:absolute;top:-4px;width:6px;height:20px;border-radius:4px;background:var(--ink);transform:translateX(-3px)}
+.ph{display:inline-block;padding:4px 12px;border-radius:20px;font-weight:600;font-size:.85rem;background:var(--fes);color:var(--fe)}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.nav strong{text-transform:capitalize}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.dow{font-size:.75rem;color:var(--mu)}
+.d{aspect-ratio:1;border-radius:50%;font-size:.9rem;padding:0;background:transparent;color:var(--ink);font-weight:400;display:flex;align-items:center;justify-content:center;position:relative}
+.d.p{background:var(--pes);color:var(--pe);font-weight:600}
+.d.pl{background:var(--pe);color:#fff;font-weight:600}
+.d.f{background:var(--fes);color:var(--fe)}
+.d.o{box-shadow:inset 0 0 0 2px var(--fe);font-weight:600}
+.d.t{text-decoration:underline}
+.d.s{outline:2px solid var(--ink);outline-offset:1px}
+.d.n::after{content:"";position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:currentColor}
+.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:.75rem;color:var(--mu);margin-top:10px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.lg em{font-style:normal}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chips button{padding:6px 12px;font-size:.85rem}
+ul{margin:0;padding-left:18px}
+li.h{list-style:none;display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--ln);margin-left:-18px}
+.note{font-size:.8rem;color:var(--mu);margin:8px 0 0}
+#lk{position:fixed;inset:0;z-index:100;background:var(--bg);overflow:auto;padding-top:env(safe-area-inset-top,0px)}
+#lk[hidden]{display:none}
+#set{display:none}
+main.st #set{display:block}
+main.st>*:not(#set):not(header){display:none}
+</style>
+</head>
+<body>
+<div id="lk" hidden></div>
+<main>
+<header><h1 style="display:flex;align-items:center;gap:10px"><svg width="38" height="38" viewBox="0 0 48 48" role="img" data-a="logoA"><circle cx="24" cy="24" r="20" fill="none" stroke="var(--ln)" stroke-width="5"/><g transform="rotate(-90 24 24)" fill="none" stroke-width="5" stroke-linecap="round"><circle cx="24" cy="24" r="20" stroke="var(--pe)" stroke-dasharray="20 105.7"/><circle cx="24" cy="24" r="20" stroke="var(--fe)" stroke-dasharray="28 97.7" stroke-dashoffset="-42"/></g><path d="M25 15.5a9 9 0 1 0 8.5 11.5 7.5 7.5 0 0 1-8.5-11.5z" fill="var(--ac)"/></svg><span data-i="title"></span></h1>
+<div class="row" style="gap:6px;flex-wrap:nowrap"><button class="g" id="th" data-a="thA"></button><button class="g" id="gr" data-a="sA">⚙️</button></div></header>
+<div id="ban"></div>
+
+<section class="card">
+<div class="row">
+<label><span data-i="f1"></span><input type="date" id="start"></label>
+<label><span data-i="f2"></span><input type="number" id="cycle" min="20" max="45"></label>
+<label><span data-i="f3"></span><input type="number" id="len" min="1" max="10"></label>
+</div>
+<button class="full" id="add" data-i="calc"></button>
+</section>
+
+<section class="card" id="res"></section>
+<section class="card"><div class="nav"><button class="g" id="prev" data-a="pm">‹</button><strong id="mo"></strong><button class="g" id="next" data-a="nm">›</button></div><div class="grid" id="cal"></div>
+<div class="lg"><span><i style="background:var(--pe)"></i><em data-i="lg1"></em></span><span><i style="background:var(--pes)"></i><em data-i="lg2"></em></span><span><i style="background:var(--fes)"></i><em data-i="lg3"></em></span><span><i style="box-shadow:inset 0 0 0 2px var(--fe)"></i><em data-i="lg4"></em></span></div></section>
+<section class="card" id="day"></section>
+<section class="card" id="tips"></section>
+<section class="card"><h2 data-i="c1"></h2><div id="c1"></div><h2 style="margin-top:14px" data-i="c2"></h2><div id="c2"></div></section>
+<section class="card"><h2 data-i="hist"></h2><div id="hist"></div></section>
+<div id="set">
+<h2 style="font-size:1.2rem" data-i="setT"></h2>
+<div id="sx"></div>
+<section class="card" id="pn"></section>
+<section class="card"><h2 data-i="bkT"></h2>
+<button class="g" id="nt" data-i="nt"></button>
+<p class="note" id="ntm" data-i="ntm"></p>
+<textarea id="bk" rows="2" data-a="bkA" style="margin-top:12px;font-size:.8rem"></textarea>
+<div class="row" style="margin-top:8px"><button class="g" id="exp" data-i="exp"></button><button class="g" id="imp" data-i="imp"></button></div>
+<p class="note" id="bkm" data-i="bkn"></p></section>
+</div>
+</main>
+<script>
+var KEY="cycle-v2",S={starts:[],cycle:28,len:5,notes:{},theme:"",rem:3,fb:null,lang:""},view=new Date(),NOW=new Date();NOW.setHours(12,0,0,0);var sel=K(NOW);
+try{var r=localStorage.getItem(KEY)||localStorage.getItem("cycle-v1");if(r){var p=JSON.parse(r);if(p&&Array.isArray(p.starts)){S.starts=p.starts;S.cycle=p.cycle||28;S.len=p.len||5;S.notes=p.notes||{};S.theme=p.theme||"";S.rem=p.rem||3;S.fb=p.fb||null;S.lang=p.lang||""}}}catch(e){}
+if(!S.theme)S.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"pastel";
+if(!S.lang){var nl=(navigator.language||"fr").slice(0,2);S.lang=nl=="en"?"en":nl=="ln"?"ln":"fr"}
+var L={
+fr:{title:"Mon cycle",thd:"Sombre",thp:"Pastel",thA:"Changer de thème",sA:"Paramètres",sX:"Fermer les paramètres",logoA:"Logo Mon cycle",f1:"Premier jour des règles",f2:"Cycle (jours)",f3:"Règles (jours)",calc:"Calculer et enregistrer",next:"Prochaines règles",inD:"Dans {n} {u}",tod:"Aujourd’hui",late:"{n} {u} de retard",fw:"Fenêtre fertile estimée",ovA:"Ovulation vers le {d}",to:" au ",day:"jour",days:"jours",wel:"Bienvenue",welT:"Saisissez le premier jour de vos dernières règles pour voir vos prévisions.",p0:"Phase menstruelle",p1:"Phase folliculaire",p2:"Ovulation",p3:"Phase lutéale",dayOf:"jour {d} sur {c}",tH:"Conseils : {p}",tH0:"Conseils bien-être",tN:"Ils s’afficheront selon votre phase du cycle dès que vous aurez saisi une date.",
+t:[["Privilégiez le repos et la chaleur (bouillotte, bain tiède).","Mangez des aliments riches en fer : lentilles, épinards, viande rouge.","Une marche douce ou du yoga peut apaiser les crampes."],["Votre énergie remonte : c’est le bon moment pour de nouveaux projets.","Essayez un sport plus intense ou du renforcement musculaire.","Ajoutez des protéines et des légumes frais à vos repas."],["Énergie et sociabilité sont souvent au plus haut.","Hydratez-vous bien et gardez des repas équilibrés.","Période fertile : pensez à la contraception si nécessaire."],["Les fluctuations d’humeur sont fréquentes : ménagez-vous.","Le magnésium (noix, chocolat noir) peut aider contre les tensions.","Dormez suffisamment et limitez le sel et la caféine."]],
+lg1:"Règles",lg2:"Prévues",lg3:"Fertile",lg4:"Ovulation",pm:"Mois précédent",nm:"Mois suivant",dn:"Notes du {d}",mood:"Humeur",mA:"Humeur {n}",en:"Énergie",sy:"Symptômes",s:["Crampes","Maux de tête","Fatigue","Ballonnements","Acné","Douleurs dos"],free:"Note libre",c1:"Durée des cycles (jours)",c2:"Humeur moyenne par mois (1 à 5)",nod:"Pas encore de données.",two:"Enregistrez au moins deux cycles.",hist:"Historique",nohist:"Aucun cycle enregistré.",cyd:"{n} jours de cycle",del:"Supprimer",bR:"Règles prévues {w}.",rin:"dans {n} {u}",rtod:"aujourd’hui",bF:"Période fertile dans {n} {u}.",bFn:"Vous êtes dans votre période fertile.",
+setT:"Paramètres",rem:"Rappels",remT:"Prévenir avant les règles et la période fertile :",lang:"Langue",eva:"Évaluation",evaT:"Notez l’appli et laissez un commentaire.",star:"Note {n} sur 5",cmt:"Un commentaire ? (facultatif)",cp:"Copier mon avis",fbm:"Votre avis reste sur cet appareil. Copiez-le pour l’envoyer à la personne qui vous a donné l’appli.",cpd:"Avis copié.",cpf:"Copie impossible ici : notez votre avis manuellement.",note5:"Note : {n}/5",
+pinT:"Code PIN",pinOn:"Le code est actif. L’appli se verrouille aussi quand vous la quittez. Pour le supprimer, saisissez-le.",pinOff:"Verrouillez l’appli avec un code à 4 chiffres. En cas d’oubli, il faudra effacer vos données.",cur:"Code actuel",newc:"Nouveau code",lkn:"Verrouiller maintenant",prm:"Supprimer le code",pset:"Activer le code",p4:"Le code doit contenir 4 chiffres.",pact:"Code activé.",pwr:"Code incorrect.",prd:"Code supprimé.",
+bkT:"Rappels et sauvegarde",nt:"Activer les notifications",ntm:"Un rappel s’affiche avant les règles et la période fertile à chaque ouverture de l’appli.",ntNo:"Notifications non prises en charge ici : le rappel s’affiche en haut de l’appli.",ntOk:"Notifications activées à l’ouverture de l’appli.",ntKo:"Notifications refusées : le rappel reste visible dans l’appli.",bkA:"Sauvegarde",exp:"Exporter",imp:"Importer",bkn:"Données enregistrées sur cet appareil uniquement, sans connexion. Estimation indicative : ne remplace ni avis médical ni contraception.",ecp:"Données copiées. Gardez-les en lieu sûr.",ecf:"Copiez ce texte et gardez-le en lieu sûr.",iok:"Données importées.",iko:"Texte invalide.",lkp:"Entrez votre code à 4 chiffres",lkw:"Code incorrect.",lkf:"Code oublié ?",lkc:"Cela efface toutes vos données. Appuyez de nouveau sur « Code oublié ? » pour confirmer."},
+en:{title:"My cycle",thd:"Dark",thp:"Pastel",thA:"Change theme",sA:"Settings",sX:"Close settings",logoA:"My cycle logo",f1:"First day of period",f2:"Cycle (days)",f3:"Period (days)",calc:"Calculate and save",next:"Next period",inD:"In {n} {u}",tod:"Today",late:"{n} {u} late",fw:"Estimated fertile window",ovA:"Ovulation around {d}",to:" to ",day:"day",days:"days",wel:"Welcome",welT:"Enter the first day of your last period to see your predictions.",p0:"Menstrual phase",p1:"Follicular phase",p2:"Ovulation",p3:"Luteal phase",dayOf:"day {d} of {c}",tH:"Tips: {p}",tH0:"Wellness tips",tN:"They will appear based on your cycle phase once you enter a date.",
+t:[["Favor rest and warmth (hot water bottle, warm bath).","Eat iron-rich foods: lentils, spinach, red meat.","A gentle walk or yoga can ease cramps."],["Your energy is rising: a good time for new projects.","Try more intense exercise or strength training.","Add protein and fresh vegetables to your meals."],["Energy and sociability are often at their peak.","Stay hydrated and keep your meals balanced.","Fertile period: think about contraception if needed."],["Mood swings are common: be kind to yourself.","Magnesium (nuts, dark chocolate) may help with tension.","Get enough sleep and limit salt and caffeine."]],
+lg1:"Period",lg2:"Predicted",lg3:"Fertile",lg4:"Ovulation",pm:"Previous month",nm:"Next month",dn:"Notes for {d}",mood:"Mood",mA:"Mood {n}",en:"Energy",sy:"Symptoms",s:["Cramps","Headache","Fatigue","Bloating","Acne","Back pain"],free:"Free note",c1:"Cycle length (days)",c2:"Average mood per month (1 to 5)",nod:"No data yet.",two:"Log at least two cycles.",hist:"History",nohist:"No cycle logged.",cyd:"{n}-day cycle",del:"Delete",bR:"Period expected {w}.",rin:"in {n} {u}",rtod:"today",bF:"Fertile period in {n} {u}.",bFn:"You are in your fertile period.",
+setT:"Settings",rem:"Reminders",remT:"Notify before your period and fertile window:",lang:"Language",eva:"Rating",evaT:"Rate the app and leave a comment.",star:"Rating {n} of 5",cmt:"A comment? (optional)",cp:"Copy my review",fbm:"Your review stays on this device. Copy it to send it to the person who gave you the app.",cpd:"Review copied.",cpf:"Copy not possible here: note your review manually.",note5:"Rating: {n}/5",
+pinT:"PIN code",pinOn:"The code is active. The app also locks when you leave it. To remove it, enter it.",pinOff:"Lock the app with a 4-digit code. If you forget it, your data will have to be erased.",cur:"Current code",newc:"New code",lkn:"Lock now",prm:"Remove code",pset:"Enable code",p4:"The code must have 4 digits.",pact:"Code enabled.",pwr:"Wrong code.",prd:"Code removed.",
+bkT:"Reminders and backup",nt:"Enable notifications",ntm:"A reminder appears before your period and fertile window each time you open the app.",ntNo:"Notifications are not supported here: the reminder shows at the top of the app.",ntOk:"Notifications enabled when you open the app.",ntKo:"Notifications denied: the reminder stays visible in the app.",bkA:"Backup",exp:"Export",imp:"Import",bkn:"Data is stored on this device only, with no connection. Estimates only: not a substitute for medical advice or contraception.",ecp:"Data copied. Keep it somewhere safe.",ecf:"Copy this text and keep it somewhere safe.",iok:"Data imported.",iko:"Invalid text.",lkp:"Enter your 4-digit code",lkw:"Wrong code.",lkf:"Forgot code?",lkc:"This erases all your data. Press “Forgot code?” again to confirm."},
+ln:{title:"Sanza na ngai",thd:"Moindo",thp:"Pasteli",thA:"Kobongola langi",sA:"Kobongisa",sX:"Kokanga",logoA:"Elilingi ya Sanza na ngai",f1:"Mokolo ya liboso ya sanza",f2:"Cycle (mikolo)",f3:"Sanza (mikolo)",calc:"Kotanga mpe kobomba",next:"Sanza ekoya",inD:"Na nsima ya {n} {u}",tod:"Lelo",late:"Esili {n} {u} na nsima",fw:"Ntango ya kobota (ndenge ekanisami)",ovA:"Ovulation penepene na {d}",to:" tii ",day:"mokolo",days:"mikolo",wel:"Boyei malamu",welT:"Koma mokolo ya liboso ya sanza na yo ya nsuka mpo na komona makanisi.",p0:"Ntango ya sanza",p1:"Ntango ya liboso",p2:"Ovulation",p3:"Ntango ya nsuka",dayOf:"mokolo {d} na {c}",tH:"Toli: {p}",tH0:"Toli mpo na nzoto",tN:"Ekomonana engebene na ntango ya cycle na yo soki okomi mokolo.",
+t:[["Pema mingi mpe zwa moto na libumu (bouillotte, mai ya moto).","Lia biloko na fer mingi: ndunda, epinards, mosuni ya motane.","Tambola malembe to sala yoga mpo na kolongola pasi ya libumu."],["Makasi ezongi: ntango malamu mpo na mikano ya sika.","Meka masano makasi to kolendisa nzoto.","Bakisa protéines mpe ndunda ya sika na bilei na yo."],["Makasi mpe boyokani ezalaka na likolo mingi.","Nwa mai mingi mpe lia bilei ya malamu.","Ntango ya kobota: kanisa kobatela yo soki olingi kobota te."],["Motema ekoki kobongwana: bomipesa bopemi.","Magnésium (mbila, chocolat ya moindo) ekoki kosalisa na pasi.","Lala malamu mpe pesa moke na mungwa mpe café."]],
+lg1:"Sanza",lg2:"Ekanisami",lg3:"Kobota",lg4:"Ovulation",pm:"Sanza eleki",nm:"Sanza ekoya",dn:"Makanisi ya {d}",mood:"Motema",mA:"Motema {n}",en:"Makasi",sy:"Bilembo",s:["Pasi ya libumu","Pasi ya motó","Kolemba","Libumu etomboki","Acné","Pasi ya mokongo"],free:"Makanisi mosusu",c1:"Boniboni cycle ezalaki (mikolo)",c2:"Motema ya kati na sanza (1 tii 5)",nod:"Naino ezali na ba données te.",two:"Bomba bacycle mibale na moke.",hist:"Lisolo ya kala",nohist:"Cycle moko te ebombami.",cyd:"cycle ya mikolo {n}",del:"Kolongola",bR:"Sanza ekoya {w}.",rin:"na nsima ya {n} {u}",rtod:"lelo",bF:"Ntango ya kobota ekoya na nsima ya {n} {u}.",bFn:"Ozali na ntango ya kobota.",
+setT:"Kobongisa",rem:"Kokanisa",remT:"Koyebisa liboso ya sanza mpe ntango ya kobota:",lang:"Monoko",eva:"Kopesa motuya",evaT:"Pesa motuya na application mpe tika likanisi.",star:"Motuya {n} na 5",cmt:"Likanisi? (soki olingi)",cp:"Kopimela likanisi na ngai",fbm:"Likanisi na yo etikali na téléphone oyo kaka. Pimela yango mpo na kotinda na moto apesaki yo application.",cpd:"Epimami.",cpf:"Kopimela ekoki te awa: koma yango yo moko.",note5:"Motuya: {n}/5",
+pinT:"Code PIN",pinOn:"Code ezali na mosala. Application ekangama mpe soki obimi na yango. Mpo na kolongola yango, koma yango.",pinOff:"Kanga application na code ya ciffres 4. Soki obosani yango, esengeli kolongola ba données na yo.",cur:"Code ya sikoyo",newc:"Code ya sika",lkn:"Kanga sikoyo",prm:"Longola code",pset:"Sala code",p4:"Code esengeli kozala na ciffres 4.",pact:"Code esili kosala.",pwr:"Code ezali malamu te.",prd:"Code elongwe.",
+bkT:"Kokanisa mpe kobomba",nt:"Pesa nzela na ba notifications",ntm:"Likanisi ekomonana liboso ya sanza mpe ntango ya kobota tango nyonso ofungoli application.",ntNo:"Ba notifications ekoki te awa: likanisi ekomonana na likolo ya application.",ntOk:"Ba notifications ezali na mosala tango ofungoli application.",ntKo:"Ba notifications ekangami: likanisi ekomonana kaka na kati ya application.",bkA:"Kobomba",exp:"Kobimisa",imp:"Kokotisa",bkn:"Ba données ebombami na téléphone oyo kaka, na internet te. Ezali kaka ndenge ekanisami: ekoki kosimba toli ya monganga to contraception te.",ecp:"Ba données epimami. Bomba yango malamu.",ecf:"Pimela mokanda oyo mpe bomba yango malamu.",iok:"Ba données ekotisami.",iko:"Mokanda ezali malamu te.",lkp:"Koma code na yo ya ciffres 4",lkw:"Code ezali malamu te.",lkf:"Obosani code?",lkc:"Yango ekolongola ba données nyonso. Fina lisusu na « Obosani code? » mpo na kondimisa."}};
+function T(k,v){var s=(L[S.lang]&&L[S.lang][k]);if(s==null)s=L.fr[k];if(typeof s!="string")return s;if(v)for(var i in v)s=s.replace("{"+i+"}",v[i]);return s}
+function U(n){return T(n>1?"days":"day")}
+function LC(){if(S.lang=="en")return"en-GB";if(S.lang=="ln"){try{if(Intl.DateTimeFormat.supportedLocalesOf(["ln"]).length)return"ln"}catch(e){}}return"fr-FR"}
+function applyLang(){document.documentElement.lang=S.lang;document.title=T("title");
+Array.prototype.forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=T(e.getAttribute("data-i"))});
+Array.prototype.forEach.call(document.querySelectorAll("[data-a]"),function(e){e.setAttribute("aria-label",T(e.getAttribute("data-a")))})}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function P(s){var a=s.split("-");return new Date(+a[0],+a[1]-1,+a[2],12)}
+function K(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function A(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+function F(d,o){return d.toLocaleDateString(LC(),o||{day:"numeric",month:"long"})}
+function $(i){return document.getElementById(i)}
+function dd(a,b){return Math.round((a-b)/864e5)}
+function avg(){var s=S.starts.slice().sort();if(s.length<2)return S.cycle;var t=0;for(var i=1;i<s.length;i++)t+=dd(P(s[i]),P(s[i-1]));var m=Math.round(t/(s.length-1));return m>=20&&m<=45?m:S.cycle}
+var MO=["😞","😕","😐","🙂","😄"];
+function bars(v,l,mx,col){if(!v.some(function(x){return x!=null}))return'<p class="note">'+T("nod")+'</p>';var bw=300/v.length,s='<svg viewBox="0 0 300 115" width="100%" role="img" style="color:var(--mu)">';
+v.forEach(function(x,i){var h=x==null?0:x/mx*70,cx=i*bw+bw/2;s+='<rect x="'+(i*bw+8)+'" y="'+(85-h)+'" width="'+(bw-16)+'" height="'+h+'" rx="6" fill="'+col+'"/>'+(x==null?"":'<text x="'+cx+'" y="'+(80-h)+'" font-size="11" text-anchor="middle" fill="currentColor">'+x+'</text>')+'<text x="'+cx+'" y="104" font-size="10" text-anchor="middle" fill="currentColor">'+l[i]+'</text>'});return s+"</svg>"}
+function render(){
+document.documentElement.setAttribute("data-theme",S.theme);$("th").textContent=S.theme=="dark"?"🌸 "+T("thp"):"🌙 "+T("thd");
+$("cycle").value=S.cycle;$("len").value=S.len;
+var c=avg(),so=S.starts.slice().sort(),logged={},pred={},fert={},ovu={},next=null,ovC=null,msg="",res="",tips="",rm=S.rem||3;
+so.forEach(function(s){for(var i=0;i<S.len;i++)logged[K(A(P(s),i))]=1});
+if(so.length){var last=P(so[so.length-1]);
+for(var n=1;n<=6;n++){var st=A(last,c*n);if(n==1)next=st;for(var i=0;i<S.len;i++)pred[K(A(st,i))]=1;var ov=A(st,-14);if(n==1)ovC=ov;ovu[K(ov)]=1;for(var j=-5;j<=1;j++)fert[K(A(ov,j))]=1}
+var diff=dd(next,NOW),fs=dd(A(ovC,-5),NOW),fe=dd(A(ovC,1),NOW);
+if(diff>=0&&diff<=rm)msg=T("bR",{w:diff?T("rin",{n:diff,u:U(diff)}):T("rtod")});else if(fs>0&&fs<=rm)msg=T("bF",{n:fs,u:U(fs)});else if(fs<=0&&fe>=0)msg=T("bFn");
+var d=dd(NOW,last)+1,ph=d<1?-1:d<=S.len?0:d<c-15?1:d<=c-13?2:3;
+var pct=Math.min(Math.max(d,1),c)/c*100,seg=[S.len,Math.max(c-15-S.len,0),3,13],ab=Math.abs(diff);
+res='<p class="mu">'+T("next")+'</p><p class="big">'+F(next,{weekday:"long",day:"numeric",month:"long"})+'</p><p class="mu">'+(diff>0?T("inD",{n:diff,u:U(diff)}):diff==0?T("tod"):T("late",{n:ab,u:U(ab)}))+'</p>'
++'<p class="mu" style="margin-top:12px">'+T("fw")+'</p><p style="margin:2px 0;font-weight:700;color:var(--fe)">'+F(A(ovC,-5))+T("to")+F(A(ovC,1))+'</p><p class="mu">'+T("ovA",{d:F(ovC)})+'</p>';
+if(ph>=0){res+='<div class="bar" aria-hidden="true">'+["var(--pe)","var(--pes)","var(--fe)","var(--fes)"].map(function(col,i){return'<i style="width:'+seg[i]/c*100+'%;background:'+col+'"></i>'}).join("")+'<b style="left:'+pct+'%"></b></div><span class="ph">'+T("p"+ph)+" · "+T("dayOf",{d:Math.min(d,c),c:c})+'</span>';
+tips='<h2>'+T("tH",{p:T("p"+ph).toLowerCase()})+'</h2><ul>'+T("t")[ph].map(function(t){return"<li>"+t+"</li>"}).join("")+"</ul>"}
+}else{res='<p class="big" style="font-size:1.2rem">'+T("wel")+'</p><p class="mu">'+T("welT")+'</p>';tips='<h2>'+T("tH0")+'</h2><p class="note">'+T("tN")+'</p>'}
+$("ban").innerHTML=msg?'<div class="ban">🔔 '+msg+"</div>":"";$("res").innerHTML=res;$("tips").innerHTML=tips;window._msg=msg;
+var y=view.getFullYear(),m=view.getMonth(),h="";for(var i=0;i<7;i++)h+='<div class="dow">'+F(new Date(2024,0,1+i,12),{weekday:"narrow"})+"</div>";
+var fi=new Date(y,m,1,12),off=(fi.getDay()+6)%7,dim=new Date(y,m+1,0).getDate();for(var i=0;i<off;i++)h+="<div></div>";
+for(var q=1;q<=dim;q++){var k=K(new Date(y,m,q,12)),cl="d";if(logged[k])cl+=" pl";else if(pred[k])cl+=" p";else if(fert[k])cl+=" f";if(ovu[k])cl+=" o";if(k==K(NOW))cl+=" t";if(k==sel)cl+=" s";if(S.notes[k])cl+=" n";h+='<button class="'+cl+'" data-k="'+k+'">'+q+"</button>"}
+$("cal").innerHTML=h;$("mo").textContent=F(fi,{month:"long",year:"numeric"});
+var N=S.notes[sel]||{},sy=N.s||[],SY=T("s");
+$("day").innerHTML='<h2>'+T("dn",{d:F(P(sel),{weekday:"long",day:"numeric",month:"long"})})+'</h2><p class="mu">'+T("mood")+'</p><div class="chips">'+MO.map(function(e,i){return'<button class="g'+(N.m==i+1?" on":"")+'" data-a="m" data-v="'+(i+1)+'" aria-label="'+T("mA",{n:i+1})+'">'+e+"</button>"}).join("")+'</div><p class="mu">'+T("en")+'</p><div class="chips">'+[1,2,3,4,5].map(function(i){return'<button class="g'+(N.e==i?" on":"")+'" data-a="e" data-v="'+i+'">'+i+"</button>"}).join("")+'</div><p class="mu">'+T("sy")+'</p><div class="chips">'+SY.map(function(s,i){return'<button class="g'+(sy.indexOf(i)>=0?" on":"")+'" data-a="s" data-v="'+i+'">'+s+"</button>"}).join("")+'</div><textarea id="tx" rows="2" placeholder="'+T("free")+'">'+(N.t||"").replace(/</g,"&lt;")+"</textarea>";
+var dv=[],dl=[];for(var i=Math.max(1,so.length-6);i<so.length;i++){dv.push(dd(P(so[i]),P(so[i-1])));dl.push(F(P(so[i]),{day:"numeric",month:"short"}))}
+$("c1").innerHTML=so.length>1?bars(dv,dl,Math.max.apply(null,dv)+5,"var(--fe)"):'<p class="note">'+T("two")+'</p>';
+var mv=[],ml=[];for(var i=5;i>=0;i--){var dt=new Date(NOW.getFullYear(),NOW.getMonth()-i,1,12),pre=K(dt).slice(0,7),t=0,cn=0;for(var k in S.notes)if(k.slice(0,7)==pre&&S.notes[k].m){t+=S.notes[k].m;cn++}mv.push(cn?Math.round(t/cn*10)/10:null);ml.push(F(dt,{month:"short"}))}
+$("c2").innerHTML=bars(mv,ml,5,"var(--pe)");
+var li="";so.slice().reverse().forEach(function(s,i,a){var nx=a[i+1],cy=nx?T("cyd",{n:dd(P(s),P(nx))}):"";li+='<li class="h"><span>'+F(P(s),{day:"numeric",month:"long",year:"numeric"})+' <span class="mu">'+cy+'</span></span><button class="g" data-del="'+s+'" style="padding:2px 10px;font-size:.8rem">'+T("del")+'</button></li>'});
+$("hist").innerHTML=li||'<p class="note">'+T("nohist")+'</p>';
+}
+$("add").onclick=function(){var v=$("start").value,c=+$("cycle").value,l=+$("len").value;if(c>=20&&c<=45)S.cycle=c;if(l>=1&&l<=10)S.len=l;if(v&&S.starts.indexOf(v)<0)S.starts.push(v);$("start").value="";save();view=v?P(v):new Date();render()};
+$("th").onclick=function(){S.theme=S.theme=="dark"?"pastel":"dark";save();render()};
+$("prev").onclick=function(){view=new Date(view.getFullYear(),view.getMonth()-1,1);render()};
+$("next").onclick=function(){view=new Date(view.getFullYear(),view.getMonth()+1,1);render()};
+$("cal").onclick=function(e){var k=e.target.getAttribute("data-k");if(k){sel=k;render()}};
+$("hist").onclick=function(e){var s=e.target.getAttribute("data-del");if(s){S.starts=S.starts.filter(function(x){return x!=s});save();render()}};
+$("day").onclick=function(e){var a=e.target.getAttribute("data-a");if(!a)return;var v=+e.target.getAttribute("data-v"),N=S.notes[sel]||(S.notes[sel]={});
+if(a=="s"){var s=N.s||(N.s=[]),i=s.indexOf(v);if(i<0)s.push(v);else s.splice(i,1)}else{if(N[a]==v)delete N[a];else N[a]=v}save();render()};
+$("day").onchange=function(e){if(e.target.id=="tx"){var N=S.notes[sel]||(S.notes[sel]={});N.t=e.target.value;save();render()}};
+$("exp").onclick=function(){var t=$("bk");t.value=JSON.stringify(S);t.select();var ok=false;try{ok=document.execCommand("copy")}catch(e){}$("bkm").textContent=T(ok?"ecp":"ecf")};
+$("imp").onclick=function(){try{var p=JSON.parse($("bk").value);if(!p||!Array.isArray(p.starts))throw 0;S.starts=p.starts.filter(function(x){return/^\d{4}-\d{2}-\d{2}$/.test(x)});S.cycle=+p.cycle>=20&&+p.cycle<=45?+p.cycle:28;S.len=+p.len>=1&&+p.len<=10?+p.len:5;S.notes=p.notes||{};save();render();$("bkm").textContent=T("iok")}catch(e){$("bkm").textContent=T("iko")}};
+$("nt").onclick=function(){if(!window.Notification){$("ntm").textContent=T("ntNo");return}Notification.requestPermission().then(function(r){$("ntm").textContent=T(r=="granted"?"ntOk":"ntKo")})};
+var PK="cycle-pin",pin="",fg=false;
+try{pin=localStorage.getItem(PK)||""}catch(e){}
+function H(s){var h1=0xdeadbeef,h2=0x41c6ce57,c;s="cy|"+s;for(var i=0;i<s.length;i++){c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return String(4294967296*(2097151&h2)+(h1>>>0))}
+function lock(){if(!pin)return;var l=$("lk");fg=false;l.hidden=false;l.innerHTML='<div style="max-width:320px;margin:0 auto;padding:20vh 20px 0;text-align:center"><h1>🔒 '+T("title")+'</h1><p class="mu">'+T("lkp")+'</p><input id="lp" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="PIN" style="text-align:center;font-size:1.6rem;letter-spacing:.5em;margin-top:12px"><p class="note" id="lm"></p><button class="g" id="lf" style="margin-top:20px">'+T("lkf")+'</button></div>';var i=$("lp");try{i.focus()}catch(e){}}
+$("lk").oninput=function(e){if(e.target.id!="lp")return;var v=e.target.value.replace(/\D/g,"");e.target.value=v;if(v.length==4){if(H(v)==pin){$("lk").hidden=true;$("lk").innerHTML=""}else{e.target.value="";$("lm").textContent=T("lkw")}}};
+$("lk").onclick=function(e){if(e.target.id!="lf")return;if(!fg){fg=true;$("lm").textContent=T("lkc");return}
+try{localStorage.removeItem(KEY);localStorage.removeItem("cycle-v1");localStorage.removeItem(PK)}catch(x){}
+pin="";S={starts:[],cycle:28,len:5,notes:{},theme:S.theme,rem:3,fb:null,lang:S.lang};$("lk").hidden=true;$("lk").innerHTML="";pinUI();render()};
+function pinUI(m){$("pn").innerHTML=pin?'<h2>'+T("pinT")+'</h2><p class="note" style="margin:0 0 10px">'+T("pinOn")+'</p><input id="pc" type="password" inputmode="numeric" maxlength="4" placeholder="'+T("cur")+'" aria-label="'+T("cur")+'"><div class="row" style="margin-top:10px"><button class="g" id="lkn">'+T("lkn")+'</button><button class="g" id="prm">'+T("prm")+'</button></div><p class="note" id="pm">'+(m||"")+'</p>':'<h2>'+T("pinT")+'</h2><p class="note" style="margin:0 0 10px">'+T("pinOff")+'</p><input id="pc" type="password" inputmode="numeric" maxlength="4" placeholder="'+T("newc")+'" aria-label="'+T("newc")+'"><button class="full" id="pset">'+T("pset")+'</button><p class="note" id="pm">'+(m||"")+'</p>'}
+$("pn").onclick=function(e){var id=e.target.id,i=$("pc"),v=i?i.value.replace(/\D/g,""):"";
+if(id=="pset"){if(v.length!=4){$("pm").textContent=T("p4");return}pin=H(v);try{localStorage.setItem(PK,pin)}catch(x){}pinUI(T("pact"))}
+else if(id=="prm"){if(H(v)!=pin){$("pm").textContent=T("pwr");return}pin="";try{localStorage.removeItem(PK)}catch(x){}pinUI(T("prd"))}
+else if(id=="lkn")lock()};
+document.addEventListener("visibilitychange",function(){if(document.hidden)lock()});
+function setUI(){var f=S.fb||{};$("sx").innerHTML='<section class="card"><h2>'+T("rem")+'</h2><p class="note" style="margin:0 0 10px">'+T("remT")+'</p><div class="chips">'+[1,2,3,5].map(function(n){return'<button class="g'+((S.rem||3)==n?" on":"")+'" data-rem="'+n+'">'+n+" "+U(n)+"</button>"}).join("")+'</div></section><section class="card"><h2>'+T("lang")+'</h2><div class="chips">'+[["fr","Français"],["en","English"],["ln","Lingála"]].map(function(x){return'<button class="g'+(S.lang==x[0]?" on":"")+'" data-lang="'+x[0]+'">'+x[1]+"</button>"}).join("")+'</div></section><section class="card"><h2>'+T("eva")+'</h2><p class="note" style="margin:0 0 10px">'+T("evaT")+'</p><div class="chips">'+[1,2,3,4,5].map(function(n){return'<button class="g'+(f.s>=n?" on":"")+'" data-star="'+n+'" aria-label="'+T("star",{n:n})+'">★</button>'}).join("")+'</div><textarea id="fb" rows="2" placeholder="'+T("cmt")+'">'+(f.t||"").replace(/</g,"&lt;")+'</textarea><button class="g full" id="fbc">'+T("cp")+'</button><p class="note" id="fbm">'+T("fbm")+'</p></section>'}
+$("sx").onclick=function(e){var t=e.target,r=t.getAttribute("data-rem"),s=t.getAttribute("data-star"),g=t.getAttribute("data-lang");
+if(r){S.rem=+r;save();render();setUI()}
+else if(g){S.lang=g;save();applyLang();render();setUI();pinUI()}
+else if(s){var f=S.fb||(S.fb={});f.s=+s;save();setUI()}
+else if(t.id=="fbc"){var f2=S.fb||{},x=document.createElement("textarea"),ok=false;x.value=T("note5",{n:f2.s||0})+(f2.t?"\n"+f2.t:"");document.body.appendChild(x);x.select();try{ok=document.execCommand("copy")}catch(z){}document.body.removeChild(x);$("fbm").textContent=T(ok?"cpd":"cpf")}};
+$("sx").onchange=function(e){if(e.target.id=="fb"){var f=S.fb||(S.fb={});f.t=e.target.value;save()}};
+$("gr").onclick=function(){var m=document.querySelector("main");m.classList.toggle("st");var o=m.classList.contains("st");this.textContent=o?"✕":"⚙️";var k=o?"sX":"sA";this.setAttribute("data-a",k);this.setAttribute("aria-label",T(k));if(o)setUI();window.scrollTo(0,0)};
+applyLang();pinUI();lock();
+render();
+try{if(window.Notification&&Notification.permission=="granted"&&window._msg)new Notification(T("title"),{body:window._msg})}catch(e){}
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")==0){try{navigator.serviceWorker.register("sw.js")}catch(e){}}
+</script>
+</body>
+</html>

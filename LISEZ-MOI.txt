@@ -1,0 +1,12 @@
+Mon cycle - application installable (hors ligne)
+
+Publier sur GitHub Pages :
+1. Sur github.com : "+" > New repository. Nom : mon-cycle. Public. Create.
+2. "uploading an existing file" : glissez TOUS les fichiers de ce dossier (pas le .zip), puis Commit changes.
+3. Settings > Pages > Source : "Deploy from a branch", branche main, dossier / (root). Save.
+4. Après 1 à 2 minutes, l'adresse est : https://VOTRE-NOM.github.io/mon-cycle/
+
+Installer sur le téléphone :
+Android (Chrome) : menu ⋮ > Installer l'application.
+iPhone (Safari) : Partager > Sur l'écran d'accueil.
+Ouvrez-la une première fois avec internet : ensuite elle fonctionne sans connexion.
